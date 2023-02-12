@@ -1,4 +1,4 @@
 *.out
 *.pdf
-*.csv
 *.txt
+.vscode
