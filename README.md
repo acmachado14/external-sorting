@@ -60,3 +60,17 @@ Devido ao uso do limitador de memória RAM, é perceptível que quanto menos mem
 secundária e consequentemente terá um maior tempo de execução, 
 devido a quantidade de arquivos temporários criados e o custo de acesso dos mesmos.
 
+* Tempo de Execução com 100000000 bytes de limite
+<br>
+<img src=".github/images/100000000.png"/>
+<br>
+
+* Tempo de Execução com 1000000 bytes de limite
+<br>
+<img src=".github/images/1000000.png"/>
+<br>
+
+* Tempo de Execução com 100000 bytes de limite
+<br>
+<img src=".github/images/100000.png"/>
+<br>
