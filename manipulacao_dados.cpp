@@ -137,21 +137,25 @@ void estrutura::trocaRegistroDePosicao(int pos1, int pos2) {
 }
 
 void estrutura::imprimeTodosRegistros() { 
-   char arq[] = {"subnational.dat"};
+   char arq[] = {"subnationalOrder.dat"};
 
    FILE *file = fopen(arq, "rb");
    Arquivo c;
 
+   cout << "--------------------------Valores-----------------------\n";
    if(file){
       while(!feof(file)){
-         if(fread(&c, sizeof(Arquivo), 1, file))
-               printf("\nMeasure: %s\nQuantile: %s\nSex: %s\nAge: %s\nGeography: %s\nEthnic: %s\nValue: %s\n",
+         if(fread(&c, sizeof(Arquivo), 1, file)){
+            printf("Measure: %s\nQuantile: %s\nSex: %s\nAge: %s\nGeography: %s\nEthnic: %s\nValue: %s\n",
                c.measure, c.quantile, c.sex, c.age, c.geography, c.ethnic, c.value);
+            cout << "-------------------------------------------------------\n";
+         }
       }
       fclose(file);
    }
    else
       printf("\nErro ao abrir arquivo!\n");
+   cout << "-------------------------------------------------------\n";
 
 }
 
