@@ -135,18 +135,13 @@ void merge(int start, int end, int location) {
     int runs_count = end - start + 1;
 
     FILE *input[runs_count];
+    char ss[100];
     for (int i = 0; i < runs_count; i++) {
-        char ss[100];
         snprintf(ss, 100, "%s%d%s", "run_", start + i, ".dat");
-        fopen(ss, "rb");
+        input[i] = fopen(ss, "rb");
     }
 
     priority_queue<HeapNode, vector<HeapNode> > heap;
-
-    FILE *output;
-    char ss[100];
-    snprintf(ss, 100, "%s%d%s", "run_", location, ".dat");
-    output = fopen(ss, "ab");
 
     for (int i = 0; i < runs_count; i++) {
         Arquivo aux;
@@ -159,12 +154,14 @@ void merge(int start, int end, int location) {
     cout << "-------------------------------------------------------\n";
     cout << endl << "Merging from run_" << start << " to run_" << end << " into run_" << location << " file" << endl;
 
+    FILE *output;
+    snprintf(ss, 100, "%s%d%s", "run_", location, ".dat");
+    output = fopen(ss, "ab");
+
     while (!heap.empty()) {
         Arquivo aux2 = heap.top().aux;
         int index = heap.top().index;
         heap.pop();
-
-        // cout << sentence << ' ' << index << ' ' << sentence.length() << endl;
         
         fwrite(&aux2, sizeof(Arquivo), 1, output);
         
@@ -195,7 +192,7 @@ void merge(int runs_count, string output_name) {
     while (start < end) {
         int location = end;
         int distance = 100;
-        int time = (end - start + 1) / distance + 1;
+        int time = (end - start + 1) / distance + 1; //9 - 0 /
         if ((end - start + 1) / time < distance) {
             distance = (end - start + 1) / time + 1;
         }
