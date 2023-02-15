@@ -3,74 +3,89 @@
 #include <sstream>
 #include <cstring>
 #include <string>
+#include <vector>
+#include <algorithm>
+
+/*
+    Modos de abertura de arquivos:
+    wb -> Escrita
+    rb -> leitura
+    ab -> anexar
+    rb+ -> leitura e escrita
+    wb+ -> leitura e escrita (apaga o conteúdo caso o arquivo exista)
+    ab+ -> leitura e escrita (adiciona ao final do arquivo)
+*/
 
 using namespace std;
 
-struct estrutura {
-    char *measure;
-    char *quantile;
-    char *sex;
-    char *age;
-    char *geography;
-    char *ethnic;
-    char *value;
+int contador = 0;
+
+struct Arquivo {
+   char measure[500];
+   char quantile[500];
+   char sex[500];
+   char age[500];
+   char geography[500];
+   char ethnic[500]; 
+   char value[500];
 };
 
-void transformaEmBinario(estrutura); // Tranforma as informações lidas em binário
-void leArquivo(); // Lê um arquivo
+void transformaEmBinario(Arquivo, char arq[]); // Tranforma as informações lidas em binário
+
+void transformaEmBinario(Arquivo dados, char arq[]) {
+    FILE *file = fopen(arq, "ab");
+
+    if(file){
+        fwrite(&dados, sizeof(Arquivo), 1, file);
+        fclose(file);
+    }
+    else
+        printf("\nErro ao abrir arquivo!\n");
+
+}
+
+vector<string> split(const string &str, char sep)
+{
+    vector<string> tokens;
+ 
+    string token;
+    stringstream ss(str);
+    while (getline(ss, token, ',')) {
+        token.erase(remove_if(token.begin(), token.end(), ::isspace), token.end());
+        if (!token.empty()) {
+            tokens.push_back(token);
+        }
+    }
+ 
+    return tokens;
+}
 
 int main() {
-    leArquivo(); 
-    return 0;
-}
-
-void transformaEmBinario(estrutura informacoes) {
-    ofstream arquivoBinario("subnational.txt", ios::binary|ios::app);
-    arquivoBinario.write((char*) &informacoes, sizeof(informacoes));
-    arquivoBinario.close();
-}
-
-void leArquivo() {
     ifstream arquivo("Subnational-period-life-tables-2017-2019-CSV.csv");
-    estrutura dados;
+    Arquivo dados;
     string tempString;
     string linha;
     int contadorLinha = 0;
+    
+    char arquivoEscrita[] = {"subnational.dat"};
 
     while(getline(arquivo, linha)){
-        stringstream ss(linha);
+        char sep = ',';
+        vector<string> tokens = split(linha, sep);
 
-        getline(ss, tempString, ',');
-        dados.measure = new char[tempString.size() + 1];
-        strcpy(dados.measure,tempString.c_str());
+        strcpy(dados.measure,tokens[0].data());
+        strcpy(dados.quantile,tokens[1].data());
+        strcpy(dados.sex,tokens[2].data());
+        strcpy(dados.age,tokens[3].data());
+        strcpy(dados.geography,tokens[4].data());
+        strcpy(dados.ethnic,tokens[5].data());
+        strcpy(dados.value,tokens[6].data());
 
-        getline(ss, tempString, ',');
-        dados.quantile = new char[tempString.size() + 1];
-        strcpy(dados.quantile,tempString.c_str());
+        transformaEmBinario(dados, arquivoEscrita);
 
-        getline(ss, tempString, ',');
-        dados.sex = new char[tempString.size() + 1];
-        strcpy(dados.sex,tempString.c_str());
-
-        getline(ss, tempString, ',');
-        dados.age = new char[tempString.size() + 1];
-        strcpy(dados.age,tempString.c_str());
-
-        getline(ss, tempString, ',');
-        dados.geography = new char[tempString.size() + 1];
-        strcpy(dados.geography,tempString.c_str());
-
-        getline(ss, tempString, ',');
-        dados.ethnic = new char[tempString.size() + 1];
-        strcpy(dados.ethnic,tempString.c_str());
-
-        getline(ss, tempString, ',');
-        dados.value = new char[tempString.size() + 1];
-        strcpy(dados.value,tempString.c_str());
-
-        transformaEmBinario(dados);
-
+        contadorLinha++;
     }
-    contadorLinha++;
+    cout << contador << endl;
 
+    return 0;
 }
