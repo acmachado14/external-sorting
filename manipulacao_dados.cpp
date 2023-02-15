@@ -4,8 +4,7 @@
 
 using namespace std;
 
-class estrutura {
-private:
+struct Arquivo {
    char measure[500];
    char quantile[500];
    char sex[500];
@@ -13,6 +12,9 @@ private:
    char geography[500];
    char ethnic[500]; 
    char value[500];
+};
+
+class estrutura {
 public:
    estrutura(); // Construtor
    void modificaRegistro(int posicaoProcurada); // Modifica um registro em uma dada posição
@@ -27,11 +29,11 @@ estrutura::estrutura() {
 }
 
 void estrutura::modificaRegistro(int posicaoProcurada) { 
-   estrutura informacoes;
+   Arquivo informacoes;
 
    fstream arquivoBinario("subnational.txt", ios::in|ios::out|ios::binary);
 
-   int posicaoRegistro =  arquivoBinario.tellg() / sizeof(estrutura); // Posicao no arquivo
+   int posicaoRegistro =  arquivoBinario.tellg() / sizeof(Arquivo); // Posicao no arquivo
    bool registroEncontrado = false;
 
    while(arquivoBinario.read((char*) &informacoes, sizeof(informacoes)) or registroEncontrado == false) { // Percorre todo o arquivo ou até o registro procurado ser encontrado
@@ -48,7 +50,7 @@ void estrutura::modificaRegistro(int posicaoProcurada) {
          arquivoBinario.write((char*) &informacoes, sizeof(informacoes));
          registroEncontrado = true;
       }
-      posicaoRegistro =  arquivoBinario.tellg() / sizeof(estrutura);
+      posicaoRegistro =  arquivoBinario.tellg() / sizeof(Arquivo);
    }
    arquivoBinario.close();
    if(registroEncontrado == false) { 
@@ -57,12 +59,12 @@ void estrutura::modificaRegistro(int posicaoProcurada) {
 }
 
 void estrutura::adicionaRegistro(int posicaoNovoRegistro) {
-   estrutura informacoes;
-   estrutura dadosNovoRegistro;
+   Arquivo informacoes;
+   Arquivo dadosNovoRegistro;
    ifstream arquivoBinario("subnational.txt", ios::binary);
    ofstream arquivoTemp("Temporario.txt", ios::binary|ios::app);
 
-   int posicaoRegistro =  arquivoBinario.tellg() / sizeof(estrutura); // Posicao no arquivo
+   int posicaoRegistro =  arquivoBinario.tellg() / sizeof(Arquivo); // Posicao no arquivo
    cin >> dadosNovoRegistro.measure;
    cin >> dadosNovoRegistro.quantile;
    cin >> dadosNovoRegistro.sex;
@@ -79,7 +81,7 @@ void estrutura::adicionaRegistro(int posicaoNovoRegistro) {
       else {
          arquivoTemp.write((char*) &informacoes, sizeof(informacoes));
       }
-      posicaoRegistro =  arquivoBinario.tellg() / sizeof(estrutura);
+      posicaoRegistro =  arquivoBinario.tellg() / sizeof(Arquivo);
    }
    arquivoBinario.close();
    arquivoTemp.close();
@@ -90,13 +92,13 @@ void estrutura::adicionaRegistro(int posicaoNovoRegistro) {
 }
 
 void estrutura::trocaRegistroDePosicao(int pos1, int pos2) {
-   estrutura informacoes;
-   estrutura RegistroPos1;
-   estrutura RegistroPos2;
+   Arquivo informacoes;
+   Arquivo RegistroPos1;
+   Arquivo RegistroPos2;
 
    ifstream arquivoBinario("subnational.txt", ios::binary);
 
-   int posicao = arquivoBinario.tellg() / sizeof(estrutura); // Posicao no arquivo
+   int posicao = arquivoBinario.tellg() / sizeof(Arquivo); // Posicao no arquivo
 
    while(arquivoBinario.read((char*) &informacoes, sizeof(informacoes))) {
       if(posicao == pos1) {
@@ -105,14 +107,14 @@ void estrutura::trocaRegistroDePosicao(int pos1, int pos2) {
       else if(posicao == pos2) {
          RegistroPos2 = informacoes; 
       } 
-      posicao = arquivoBinario.tellg() / sizeof(estrutura);
+      posicao = arquivoBinario.tellg() / sizeof(Arquivo);
    }
    arquivoBinario.close();
 
    ifstream arquivoB("subnational.txt", ios::binary);
    ofstream arquivoTemp("Temp.txt", ios::binary|ios::app);
 
-   int posicaoRegistro =  arquivoB.tellg() / sizeof(estrutura); // Posicao no arquivo
+   int posicaoRegistro =  arquivoB.tellg() / sizeof(Arquivo); // Posicao no arquivo
 
    while(arquivoB.read((char*) &informacoes, sizeof(informacoes))) {
       if(posicaoRegistro == pos1) {
@@ -124,7 +126,7 @@ void estrutura::trocaRegistroDePosicao(int pos1, int pos2) {
       else {
          arquivoTemp.write((char*) &informacoes, sizeof(informacoes));
       }
-      posicaoRegistro = arquivoB.tellg() / sizeof(estrutura);
+      posicaoRegistro = arquivoB.tellg() / sizeof(Arquivo);
    }
    
    arquivoB.close();
@@ -135,25 +137,28 @@ void estrutura::trocaRegistroDePosicao(int pos1, int pos2) {
 }
 
 void estrutura::imprimeTodosRegistros() { 
-   estrutura informacoes;
-   ifstream arquivoBinario("subnational.txt", ios::binary);
-   
-   while(arquivoBinario.read((char*) &informacoes, sizeof(informacoes))) { // Percorre todo o arquivo
-      cout << informacoes.measure << " ";
-      cout << informacoes.quantile << " "; 
-      cout << informacoes.sex << " " ;
-      cout << informacoes.age << " "; 
-      cout << informacoes.geography << " ";
-      cout << informacoes.ethnic << " "; 
-      cout << informacoes.value << " "; 
-   };
-   arquivoBinario.close();
+   char arq[] = {"subnational.dat"};
+
+   FILE *file = fopen(arq, "rb");
+   Arquivo c;
+
+   if(file){
+      while(!feof(file)){
+         if(fread(&c, sizeof(Arquivo), 1, file))
+               printf("\nMeasure: %s\nQuantile: %s\nSex: %s\nAge: %s\nGeography: %s\nEthnic: %s\nValue: %s\n",
+               c.measure, c.quantile, c.sex, c.age, c.geography, c.ethnic, c.value);
+      }
+      fclose(file);
+   }
+   else
+      printf("\nErro ao abrir arquivo!\n");
+
 }
 
 void estrutura::imprimeRegistroEntrePosicoes(int inicio, int fim) { 
-   estrutura informacoes;
+   Arquivo informacoes;
    ifstream arquivoBinario("subnational.txt", ios::binary);
-   int pos = arquivoBinario.tellg() / sizeof(estrutura);
+   int pos = arquivoBinario.tellg() / sizeof(Arquivo);
    
    while(arquivoBinario.read((char*) &informacoes, sizeof(informacoes))) { // Percorre todo o arquivo mas apenas imprime os registros que se encontram entre duas posições específicas
       if(pos >= inicio and pos <= fim) {
@@ -165,7 +170,7 @@ void estrutura::imprimeRegistroEntrePosicoes(int inicio, int fim) {
          cout << informacoes.ethnic << " "; 
          cout << informacoes.value << " "; 
       }
-      pos = arquivoBinario.tellg() / sizeof(estrutura);
+      pos = arquivoBinario.tellg() / sizeof(Arquivo);
    };
    arquivoBinario.close();
 }
