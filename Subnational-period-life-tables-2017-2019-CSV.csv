@@ -1,12 +1,12 @@
 measure,quantile,area,sex,age,geography,ethnic,value
 lx,2.50%,01 Northland region,Female,0 years,Regional council,Total,100000
-lx,2.50%,01 Northland region,Female,1-4 years,Regional council,Total,99427
-lx,2.50%,01 Northland region,Female,5-9 years,Regional council,Total,99331
-lx,2.50%,01 Northland region,Female,10-14 years,Regional council,Total,99276
+la,2.50%,01 Northland region,Female,1-4 years,Regional council,Total,99427
+lb,2.50%,01 Northland region,Female,5-9 years,Regional council,Total,99331
+lc,2.50%,01 Northland region,Female,10-14 years,Regional council,Total,99276
 lx,2.50%,01 Northland region,Female,15-19 years,Regional council,Total,99198
 lx,2.50%,01 Northland region,Female,20-24 years,Regional council,Total,99012
 lx,2.50%,01 Northland region,Female,25-29 years,Regional council,Total,98762
-lx,2.50%,01 Northland region,Female,30-34 years,Regional council,Total,98518
+ld,2.50%,01 Northland region,Female,30-34 years,Regional council,Total,98518
 lx,2.50%,01 Northland region,Female,35-39 years,Regional council,Total,98205
 lx,2.50%,01 Northland region,Female,40-44 years,Regional council,Total,97818
-lx,2.50%,01 Northland region,Female,45-49 years,Regional council,Total,97235
+le,2.50%,01 Northland region,Female,45-49 years,Regional council,Total,97235
