@@ -1,18 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
-
-using namespace std;
-
-struct Arquivo {
-   char measure[500];
-   char quantile[500];
-   char sex[500];
-   char age[500];
-   char geography[500];
-   char ethnic[500]; 
-   char value[500];
-};
+#include "arquivo.h"
 
 class estrutura {
 public:
@@ -33,7 +19,7 @@ void estrutura::imprimeTodosRegistros() {
    if(file){
       while(!feof(file)){
          if(fread(&c, sizeof(Arquivo), 1, file)){
-            printf("Measure: %s\nQuantile: %s\nSex: %s\nAge: %s\nGeography: %s\nEthnic: %s\nValue: %s\n",
+            printf("Measure: %s\nQuantile: %s\nArea: %s\nSex: %s\nAge: %s\nEethnic: %s\nValue: %s\n",
                c.measure, c.quantile, c.sex, c.age, c.geography, c.ethnic, c.value);
             cout << "-------------------------------------------------------\n";
          }

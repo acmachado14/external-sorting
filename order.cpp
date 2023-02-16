@@ -1,27 +1,9 @@
-#include <iostream>
-#include <stdio.h>
-#include <string>
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
+#include "arquivo.h"
 #include <numeric>
 #include <ctime>
 #include <queue>
 
-using namespace std;
-
 const clock_t begin_time = clock();
-
-struct Arquivo {
-   char measure[500];
-   char quantile[500];
-   char sex[500];
-   char age[500];
-   char geography[500];
-   char ethnic[500]; 
-   char value[500];
-};
 
 struct HeapNode {
     Arquivo aux;

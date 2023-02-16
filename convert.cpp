@@ -1,10 +1,5 @@
-#include <iostream>
-#include <fstream>
+#include "arquivo.h"
 #include <sstream>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <algorithm>
 
 /*
     Modos de abertura de arquivos:
@@ -19,16 +14,6 @@
 using namespace std;
 
 int contador = 0;
-
-struct Arquivo {
-   char measure[500];
-   char quantile[500];
-   char sex[500];
-   char age[500];
-   char geography[500];
-   char ethnic[500]; 
-   char value[500];
-};
 
 void transformaEmBinario(Arquivo, char arq[]); // Tranforma as informações lidas em binário
 
