@@ -5,39 +5,36 @@
 
 const clock_t begin_time = clock();
 
+bool sortAuxFunciton (Arquivo a, Arquivo b) { 
+    string aMensure = a.measure;
+    string bMensure = b.measure;
+    if (aMensure.compare(bMensure) < 0){
+        return false;
+    }else if (aMensure.compare(bMensure) > 0){
+        return true;
+    }else{
+        string aQuantile = a.quantile;
+        string bQuantile = b.quantile;
+        if (aQuantile.compare(bQuantile) < 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+}
+
 struct HeapNode {
     Arquivo aux;
     int index;
     HeapNode(Arquivo a, int b): aux(a), index(b) {}
     bool operator<(const HeapNode& rhs) const {
-        string auxMensure = aux.measure;
-        string auxMensureRhs = rhs.aux.measure;
-        return (auxMensure.compare(auxMensureRhs) > 0);
+        return (sortAuxFunciton(rhs.aux, aux));
     }
 };
 
-bool sortAuxFunciton (Arquivo a, Arquivo b) { 
-    string aMensure = a.measure;
-    string bMensure = b.measure;
-    if (aMensure.compare(bMensure) > 0){
-        return true;
-    }else if (aMensure.compare(bMensure) < 0){
-        return false;
-    }else{
-        string aQuantile = a.quantile;
-        string bQuantile = b.quantile;
-        if (aQuantile.compare(bQuantile) > 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-}
+int input(string input_name, int TOTAL_MEM) {    
+    FILE *input = fopen(input_name.c_str(), "rb");
 
-int input(string input_name, int TOTAL_MEM) {
-    char arq[] = {"subnational.dat"};
-
-    FILE *input = fopen(arq, "rb");
     Arquivo c;
     int run_count = 0;
     int total_mem_so_far = 0;
@@ -47,10 +44,10 @@ int input(string input_name, int TOTAL_MEM) {
 
     cout << "File " << input_name << " is being read!" << endl;
     cout << "-------------------------------------------------------\n\n\n";
-
     cout << "-------------------------------------------------------\n";
+
+    Arquivo aux;
     while(!feof(input)){
-        Arquivo aux;
         if(fread(&aux, sizeof(Arquivo), 1, input)){
             if (total_mem_so_far + sizeof(Arquivo) < TOTAL_MEM) {
                 total_mem_so_far += sizeof(Arquivo) + 1;
@@ -73,10 +70,15 @@ int input(string input_name, int TOTAL_MEM) {
                     exit(-1);
                 }
 
-                for (int i = 0; i < data.size(); i++){
+                int data_size = data.size();
+                for (int i = 0; i < data_size-1; i++) {
                     fwrite(&data[i], sizeof(Arquivo), 1, output);
                 }
 
+                if (data_size > 0) {
+                    fwrite(&data[data_size-1], sizeof(Arquivo), 1, output);
+                }
+                
                 fclose(output);
                 data.clear();
                 total_mem_so_far = sizeof(Arquivo);
@@ -90,9 +92,8 @@ int input(string input_name, int TOTAL_MEM) {
 
         run_count++;
 
-        char run[10] = "run_";
         char ss[100];
-        snprintf(ss, 100, "%s%d%s", run, run_count, ".dat");
+        snprintf(ss, 100, "%s%d%s", "run_", run_count, ".dat");
 
         cout << "Writing " << ss << endl;
 
@@ -101,6 +102,7 @@ int input(string input_name, int TOTAL_MEM) {
         for (int i = 0; i < data.size(); i++) {
             fwrite(&data[i], sizeof(Arquivo), 1, output);
         }
+
         fclose(input);
         fclose(output);
     }
@@ -128,8 +130,9 @@ void merge(int start, int end, int location) {
     for (int i = 0; i < runs_count; i++) {
         Arquivo aux;
         if (!feof(input[i])) {
-            fread(&aux, sizeof(Arquivo), 1, input[i]);
-            heap.push(HeapNode(aux, i));
+            if(fread(&aux, sizeof(Arquivo), 1, input[i])){
+                heap.push(HeapNode(aux, i));
+            }
         }
     }
 
@@ -148,8 +151,9 @@ void merge(int start, int end, int location) {
         fwrite(&aux2, sizeof(Arquivo), 1, output);
         
         if (!feof(input[index])) {
-            fread(&aux2, sizeof(Arquivo), 1, input[index]);
-            heap.push(HeapNode(aux2, index));
+            if (fread(&aux2, sizeof(Arquivo), 1, input[index])){
+                heap.push(HeapNode(aux2, index));
+            }
         }
     }
 
@@ -174,7 +178,7 @@ void merge(int runs_count, string output_name) {
     while (start < end) {
         int location = end;
         int distance = 100;
-        int time = (end - start + 1) / distance + 1; //9 - 0 /
+        int time = (end - start + 1) / distance + 1;
         if ((end - start + 1) / time < distance) {
             distance = (end - start + 1) / time + 1;
         }
