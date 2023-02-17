@@ -6,16 +6,16 @@
 const clock_t begin_time = clock();
 
 bool sortAuxFunciton (Arquivo a, Arquivo b) {
-    string aAge = a.age;
-    string bAge = b.age;
-    if (aAge.compare(bAge) < 0){
+    string a_age = a.age;
+    string b_age = b.age;
+    if (a_age.compare(b_age) < 0){
         return true;
-    }else if (aAge.compare(bAge) > 0){
+    }else if (a_age.compare(b_age) > 0){
         return false;
     }else{
-        string aValue = a.value;
-        string bValue = b.value;
-        if (aValue.compare(bValue) < 0){
+        string a_value = a.value;
+        string b_value = b.value;
+        if (a_value.compare(b_value) < 0){
             return true;
         }else{
             return false;
@@ -206,6 +206,26 @@ void merge(int runs_count, string output_name) {
     cout << "-------------------------------------------------------\n\n\n";
 }
 
+void imprimeTodosRegistros(string output_name) {
+    FILE *file = fopen(output_name.c_str(), "rb");
+    Arquivo c;
+
+    cout << "--------------------------Valores-----------------------\n";
+    if(file){
+        while(!feof(file)){
+            if(fread(&c, sizeof(Arquivo), 1, file)){
+                printf("Measure: %s\nQuantile: %s\nArea: %s\nSex: %s\nAge: %s\nGeography: %s\nEethnic: %s\nValue: %s\n",
+                c.measure, c.quantile, c.area, c.sex, c.age, c.geography, c.ethnic, c.value);
+                cout << "-------------------------------------------------------\n";
+            }
+        }
+        fclose(file);
+    }
+    else
+        cout << "File input is not found!" << endl;
+    cout << "-------------------------------------------------------\n";
+}
+
 int main(int argc, char* argv[]) {
     if (argc < 4) {
         cout << "input_file output_file mem_size" << endl << "Exit program!" << endl;
@@ -221,5 +241,16 @@ int main(int argc, char* argv[]) {
     merge(runs_count, output_name);
 
     cout << "Entire process took a total of: " << float(clock() - begin_time) / CLOCKS_PER_SEC * 1000 << " msec." << endl;
+
+    int comand;
+    cout << "-------------------------------------------------------\n\n";
+    cout << "1- Print recent sorted file" << endl;
+    cout << "2- Exit" << endl;
+    cin >> comand;
+
+    if(comand == 1){
+        imprimeTodosRegistros(output_name);
+    }
+
     return 0;
 }
