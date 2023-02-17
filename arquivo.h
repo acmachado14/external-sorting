@@ -12,9 +12,10 @@ using namespace std;
 struct Arquivo {
    char measure[8];
    char quantile[10];
-   char sex[25];
-   char age[8];
-   char geography[15];
-   char ethnic[50]; 
-   char value[12];
+   char area[25];
+   char sex[8];
+   char age[15];
+   char geography[50];
+   char ethnic[12];
+   char value[10];
 };

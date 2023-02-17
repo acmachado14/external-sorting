@@ -32,7 +32,7 @@ void transformaEmBinario(Arquivo dados, char arq[]) {
 vector<string> split(const string &str, char sep)
 {
     vector<string> tokens;
- 
+
     string token;
     stringstream ss(str);
     while (getline(ss, token, ',')) {
@@ -41,7 +41,7 @@ vector<string> split(const string &str, char sep)
             tokens.push_back(token);
         }
     }
- 
+
     return tokens;
 }
 
@@ -59,11 +59,12 @@ int main() {
 
         strcpy(dados.measure,tokens[0].data());
         strcpy(dados.quantile,tokens[1].data());
-        strcpy(dados.sex,tokens[2].data());
-        strcpy(dados.age,tokens[3].data());
-        strcpy(dados.geography,tokens[4].data());
-        strcpy(dados.ethnic,tokens[5].data());
-        strcpy(dados.value,tokens[6].data());
+        strcpy(dados.area,tokens[2].data());
+        strcpy(dados.sex,tokens[3].data());
+        strcpy(dados.age,tokens[4].data());
+        strcpy(dados.geography,tokens[5].data());
+        strcpy(dados.ethnic,tokens[6].data());
+        strcpy(dados.value,tokens[7].data());
 
         transformaEmBinario(dados, arquivoEscrita);
     }

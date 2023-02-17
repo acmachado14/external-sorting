@@ -5,20 +5,20 @@
 
 const clock_t begin_time = clock();
 
-bool sortAuxFunciton (Arquivo a, Arquivo b) { 
-    string aMensure = a.measure;
-    string bMensure = b.measure;
-    if (aMensure.compare(bMensure) < 0){
-        return false;
-    }else if (aMensure.compare(bMensure) > 0){
+bool sortAuxFunciton (Arquivo a, Arquivo b) {
+    string aAge = a.age;
+    string bAge = b.age;
+    if (aAge.compare(bAge) < 0){
         return true;
+    }else if (aAge.compare(bAge) > 0){
+        return false;
     }else{
-        string aQuantile = a.quantile;
-        string bQuantile = b.quantile;
-        if (aQuantile.compare(bQuantile) < 0){
-            return false;
-        }else{
+        string aValue = a.value;
+        string bValue = b.value;
+        if (aValue.compare(bValue) < 0){
             return true;
+        }else{
+            return false;
         }
     }
 }
@@ -32,7 +32,7 @@ struct HeapNode {
     }
 };
 
-int input(string input_name, int TOTAL_MEM) {    
+int input(string input_name, int TOTAL_MEM) {
     FILE *input = fopen(input_name.c_str(), "rb");
 
     Arquivo c;
@@ -64,7 +64,7 @@ int input(string input_name, int TOTAL_MEM) {
                 cout << "Writing " << ss << endl;
 
                 output = fopen(ss, "ab");
-            
+
                 if(!output){
                     cout << "File input is not found!" << endl << "Exit program!" << endl;
                     exit(-1);
@@ -78,7 +78,7 @@ int input(string input_name, int TOTAL_MEM) {
                 if (data_size > 0) {
                     fwrite(&data[data_size-1], sizeof(Arquivo), 1, output);
                 }
-                
+
                 fclose(output);
                 data.clear();
                 total_mem_so_far = sizeof(Arquivo);
@@ -107,7 +107,7 @@ int input(string input_name, int TOTAL_MEM) {
         fclose(output);
     }
 
-    
+
     cout << "Read input is done!" << endl;
     cout << "Entire process so far took a total of: " << float(clock() - begin_time) / CLOCKS_PER_SEC * 1000 << " msec." << endl;
     cout << "-------------------------------------------------------\n\n\n";
@@ -147,9 +147,9 @@ void merge(int start, int end, int location) {
         Arquivo aux2 = heap.top().aux;
         int index = heap.top().index;
         heap.pop();
-        
+
         fwrite(&aux2, sizeof(Arquivo), 1, output);
-        
+
         if (!feof(input[index])) {
             if (fread(&aux2, sizeof(Arquivo), 1, input[index])){
                 heap.push(HeapNode(aux2, index));
@@ -214,12 +214,12 @@ int main(int argc, char* argv[]) {
 
     string input_name = argv[1];
     string output_name = argv[2];
-    int TOTAL_MEM = strtol(argv[3], nullptr, 0); // bytes 
-    
+    int TOTAL_MEM = strtol(argv[3], nullptr, 0); // bytes
+
     int runs_count = input(input_name, TOTAL_MEM);
 
     merge(runs_count, output_name);
-    
+
     cout << "Entire process took a total of: " << float(clock() - begin_time) / CLOCKS_PER_SEC * 1000 << " msec." << endl;
     return 0;
 }

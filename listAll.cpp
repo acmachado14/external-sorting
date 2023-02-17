@@ -9,7 +9,7 @@ public:
    void imprimeRegistroEntrePosicoes(int inicio, int fim); // Imprime registros entre duas posições
 };
 
-void estrutura::imprimeTodosRegistros() { 
+void estrutura::imprimeTodosRegistros() {
    char arq[] = {"subnationalOrder.dat"};
 
    FILE *file = fopen(arq, "rb");
@@ -19,8 +19,8 @@ void estrutura::imprimeTodosRegistros() {
    if(file){
       while(!feof(file)){
          if(fread(&c, sizeof(Arquivo), 1, file)){
-            printf("Measure: %s\nQuantile: %s\nArea: %s\nSex: %s\nAge: %s\nEethnic: %s\nValue: %s\n",
-               c.measure, c.quantile, c.sex, c.age, c.geography, c.ethnic, c.value);
+            printf("Measure: %s\nQuantile: %s\nArea: %s\nSex: %s\nAge: %s\nGeography: %s\nEethnic: %s\nValue: %s\n",
+               c.measure, c.quantile, c.area, c.sex, c.age, c.geography, c.ethnic, c.value);
             cout << "-------------------------------------------------------\n";
          }
       }
@@ -29,7 +29,6 @@ void estrutura::imprimeTodosRegistros() {
    else
       printf("\nErro ao abrir arquivo!\n");
    cout << "-------------------------------------------------------\n";
-
 }
 
 int main() {
